@@ -1,0 +1,29 @@
+# Docker Compose for Cancer Driver Network Analysis
+version: '3.8'
+
+services:
+  cancer-analysis:
+    build: .
+    image: cancer-driver-network-analysis:latest
+    container_name: cancer-analysis
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./results:/app/results
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python demo_workflow.py
+
+  jupyter:
+    build: .
+    image: cancer-driver-network-analysis:latest
+    container_name: cancer-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./results:/app/results
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''

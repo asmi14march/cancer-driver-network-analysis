@@ -1,0 +1,116 @@
+# Configuration file for Cancer Driver Network Analysis
+
+# Data paths
+data:
+  mafs:
+    raw_dir: "data/mafs/raw"
+    clean_dir: "data/mafs/clean"
+    ncop_dir: "data/mafs/ncop"
+  
+  networks:
+    dir: "data/networks"
+    default_network: "data/networks/ppi_network.txt"
+  
+  endeavour:
+    lists_dir: "data/endeavour/MAF_lists"
+    results_dir: "data/endeavour/results"
+    weights_dir: "data/endeavour/ncop_weights"
+  
+  evaluation:
+    reference_dir: "data/evaluation/reference"
+    cosmic_drivers: "data/evaluation/reference/cosmic_drivers.txt"
+    intogen_drivers: "data/evaluation/reference/intogen_drivers.txt"
+
+# MAF processing
+maf:
+  protein_altering_variants:
+    - "Missense_Mutation"
+    - "Nonsense_Mutation"
+    - "Frame_Shift_Del"
+    - "Frame_Shift_Ins"
+    - "Splice_Site"
+    - "In_Frame_Del"
+    - "In_Frame_Ins"
+  
+  required_columns:
+    - "Hugo_Symbol"
+    - "Tumor_Sample_Barcode"
+    - "Variant_Classification"
+  
+  min_mutations_per_gene: 2
+  min_samples_per_gene: 2
+
+# Network embedding parameters
+embedding:
+  node2vec:
+    dimensions: 128
+    walk_length: 80
+    num_walks: 10
+    p: 1.0  # Return parameter
+    q: 1.0  # In-out parameter
+    workers: 4
+    window_size: 10
+    min_count: 1
+    batch_words: 4
+  
+  deepwalk:
+    dimensions: 128
+    walk_length: 80
+    num_walks: 10
+    workers: 4
+
+# Clustering parameters
+clustering:
+  kmeans:
+    n_clusters: 10
+    random_state: 42
+    n_init: 10
+  
+  spectral:
+    n_clusters: 10
+    random_state: 42
+    affinity: "rbf"
+
+# Correlation analysis
+correlation:
+  method: "cosine"  # pearson, spearman, cosine
+  top_k: 20
+  min_correlation: 0.3
+
+# Evaluation parameters
+evaluation:
+  precision_at_k: [5, 10, 20, 50, 100]
+  min_known_drivers: 5
+  
+# Network propagation (nCop-style)
+propagation:
+  restart_probability: 0.3
+  max_iterations: 100
+  convergence_threshold: 1e-6
+
+# Visualization
+visualization:
+  figsize: [12, 10]
+  dpi: 300
+  style: "seaborn-v0_8-darkgrid"
+  color_palette: "tab10"
+
+# Output settings
+output:
+  results_dir: "results"
+  figures_dir: "figures"
+  logs_dir: "logs"
+  save_intermediate: true
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/cancer_analysis.log"
+
+# Performance
+performance:
+  use_multiprocessing: true
+  n_jobs: -1  # -1 means use all available cores
+  chunk_size: 1000
+  cache_embeddings: true

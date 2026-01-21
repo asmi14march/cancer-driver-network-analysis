@@ -2,6 +2,23 @@
 
 A comprehensive pipeline for identifying cancer driver genes through network-based prioritization and graph neural network analysis.
 
+[![CI/CD](https://github.com/asmi14march/cancer-driver-network-analysis/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/asmi14march/cancer-driver-network-analysis/actions)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+## Features
+
+- Complete MAF → Network → Evaluation pipeline
+- Node2Vec and DeepWalk graph embeddings
+- K-means and spectral clustering
+- Correlation analysis with known drivers
+- Comprehensive unit tests (pytest)
+- CI/CD pipeline (GitHub Actions)
+- Docker support for reproducibility
+- Command-line interface
+- Interactive Jupyter notebooks
+- Visualization suite
+
 ## Project Overview
 
 This project implements an end-to-end analysis pipeline that integrates:
@@ -45,19 +62,67 @@ cancer-driver-network-analysis/
 ├── gnn/
 │   ├── embedding.py            # Graph embedding implementations
 │   ├── clustering.py           # Clustering algorithms
-│   └── correlation_analysis.py # Correlation analysis tools
+│   ├── correlation_analysis.py # Correlation analysis tools
+│   └── visualization.py        # Plotting and visualization
 │
+├── tests/                     # Unit tests
+│   ├── test_embedding.py
+│   ├── test_clustering.py
+│   └── test_correlation.py
+│
+├── cli.py                     # Command-line interface
+├── config.yaml                # Configuration file
+├── config_loader.py           # Config management
+├── demo_workflow.py           # Demo workflow
+├── Dockerfile                 # Docker container
+├── docker-compose.yml         # Docker compose
 ├── requirements.txt
 └── README.md
 ```
 
 ## Quick Start
 
+### Option 1: Using the CLI
+
+```bash
+# Generate embeddings
+python cli.py embed --network data/networks/ppi.txt --output data/embeddings.txt
+
+# Cluster genes
+python cli.py cluster --embeddings data/embeddings.txt --output data/clusters.csv
+
+# Run complete pipeline
+python cli.py pipeline --network data/networks/ppi.txt --output-dir results/
+```
+
+### Option 2: Using Docker
+
+```bash
+# Build and run
+docker-compose up cancer-analysis
+
+# Or start Jupyter Lab
+docker-compose up jupyter
+# Open http://localhost:8888
+```
+
+### Option 3: Local Installation
+
+```bash
+# Setup
+bash setup.sh
+
+# Run demo
+python demo_workflow.py
+
+# Run tests
+pytest tests/ -v
+```
+
 ### Prerequisites
-- Python 3.8+
-- Virtual environment (recommended)
+- Python 3.9+
 - 4GB+ RAM
-- MAF files from cBioPortal or TCGA
+- MAF files from cBioPortal or TCGA (optional for testing)
 
 ## Complete Pipeline Workflow
 
